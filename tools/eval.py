@@ -113,6 +113,8 @@ def main():
                 show_video_level=args.show_video_level)
     elif args.dataset in ['VOT2016', 'VOT2017', 'VOT2018', 'VOT2019']:
         dataset = VOTDataset(args.dataset, root)
+        print('tracker_dir: {}'.format(tracker_dir))
+        print('trackers: {}'.format(trackers))
         dataset.set_tracker(tracker_dir, trackers)
         ar_benchmark = AccuracyRobustnessBenchmark(dataset)
         ar_result = {}

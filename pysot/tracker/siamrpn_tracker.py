@@ -16,6 +16,7 @@ from pysot.tracker.base_tracker import SiameseTracker
 class SiamRPNTracker(SiameseTracker):
     def __init__(self, model):
         super(SiamRPNTracker, self).__init__()
+        print("Init: penalty_k: {0:.3f}, lr: {1:.3f}, window_influence: {2:.3f}, search_region: {3}".format(cfg.TRACK.PENALTY_K, cfg.TRACK.LR, cfg.TRACK.WINDOW_INFLUENCE, cfg.TRACK.INSTANCE_SIZE))
         self.score_size = (cfg.TRACK.INSTANCE_SIZE - cfg.TRACK.EXEMPLAR_SIZE) // \
             cfg.ANCHOR.STRIDE + 1 + cfg.TRACK.BASE_SIZE
         self.anchor_num = len(cfg.ANCHOR.RATIOS) * len(cfg.ANCHOR.SCALES)

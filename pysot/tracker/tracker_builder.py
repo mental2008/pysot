@@ -17,5 +17,9 @@ TRACKS = {
          }
 
 
-def build_tracker(model):
+def build_tracker(model, config):
+    cfg.TRACK.PENALTY_K = float(config['penalty_k'])
+    cfg.TRACK.WINDOW_INFLUENCE = float(config['window_influence'])
+    cfg.TRACK.LR = float(config['lr'])
+    cfg.TRACK.INSTANCE_SIZE = int(config['search_region'])
     return TRACKS[cfg.TRACK.TYPE](model)

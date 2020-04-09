@@ -86,7 +86,7 @@ class EAOBenchmark:
                     *[result[tracker_name][x] for x in self.tags]))
             print(bar)
 
-    def _calculate_eao(self, tracker_name, tags):
+    def _calculate_eao(self, tracker_name, tags, pred_bboxes=None):
         all_overlaps = []
         all_failures = []
         video_names = []
@@ -95,9 +95,14 @@ class EAOBenchmark:
         for video in self.dataset:
             # video = self.dataset[i]
             gt_traj = video.gt_traj
-            if tracker_name not in video.pred_trajs:
+            if pred_bboxes is not None:
+                tracker_trajs = pred_bboxes[video.name]
+                # print('Loading pred_trajs of {}'.format(video.name))
+            elif tracker_name not in video.pred_trajs:
+                print('#EAO {}'.format(video.name))
                 tracker_trajs = video.load_tracker(self.dataset.tracker_path, tracker_name, False)
             else:
+                print('*EAO {}'.format(video.name))
                 tracker_trajs = video.pred_trajs[tracker_name]
             for tracker_traj in tracker_trajs:
                 gt_traj_length.append(len(gt_traj))
@@ -108,8 +113,9 @@ class EAOBenchmark:
                 all_failures.append(failures)
         fragment_num = sum([len(x)+1 for x in all_failures])
         max_len = max([len(x) for x in all_overlaps])
-        if len(tracker_trajs) == 0:
-            print('Warning: some seqs in {}.{} not found'.format(tracker_name, tags))
+        assert len(tracker_trajs) > 0
+        # if len(tracker_trajs) == 0:
+        #     print('Warning: some seqs in {}.{} not found'.format(tracker_name, tags))
         seq_weight = 1 / (len(tracker_trajs) + 1e-10) # division by zero
 
         eao = {}
